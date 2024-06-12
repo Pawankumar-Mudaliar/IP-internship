@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        /* Basic reset */
+        body, h1, h3, p, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header styling */
+        h1 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Timer styling */
+        #timer {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* Question container styling */
+        .allQuestions {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Individual question styling */
+        .questionDiv {
+            margin-bottom: 20px;
+        }
+
+        /* Question title styling */
+        .questionDiv h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #2980b9;
+        }
+
+        /* Option styling */
+        .questionDiv input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .questionDiv label {
+            font-size: 16px;
+        }
+
+        /* Button styling */
+        button[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .allQuestions {
+                width: 100%;
+                padding: 15px;
+            }
+            .questionDiv h3 {
+                font-size: 16px;
+            }
+            .questionDiv label {
+                font-size: 14px;
+            }
+            button[type="submit"] {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Quiz</h1>
+    <p id="timer">Time left: 60 seconds</p>
+    <div class="allQuestions"></div>
+    <br><br>
+    <button type="submit" onclick="calculateResult()">Calculate</button>
+
+    <script>
+        var quizQuestions = [
+            {
+                question: "What is the value of PI?",
+                options: [
+                    { value: "A", text: "3.14" },
+                    { value: "B", text: "3" },
+                    { value: "C", text: "300" },
+                    { value: "D", text: "22" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                question: "What is the capital of France?",
+                options: [
+                    { value: "A", text: "Berlin" },
+                    { value: "B", text: "Madrid" },
+                    { value: "C", text: "Paris" },
+                    { value: "D", text: "Lisbon" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: [
+                    { value: "A", text: "Earth" },
+                    { value: "B", text: "Mars" },
+                    { value: "C", text: "Jupiter" },
+                    { value: "D", text: "Saturn" }
+                ],
+                correctAnswer: "B"
+            },
+            {
+                question: "What is the largest ocean on Earth?",
+                options: [
+                    { value: "A", text: "Atlantic Ocean" },
+                    { value: "B", text: "Indian Ocean" },
+                    { value: "C", text: "Arctic Ocean" },
+                    { value: "D", text: "Pacific Ocean" }
+                ],
+                correctAnswer: "D"
+            },
+            {
+                question: "Who wrote 'Hamlet'?",
+                options: [
+                    { value: "A", text: "Charles Dickens" },
+                    { value: "B", text: "Leo Tolstoy" },
+                    { value: "C", text: "William Shakespeare" },
+                    { value: "D", text: "Mark Twain" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                question: "What is the chemical symbol for water?",
+                options: [
+                    { value: "A", text: "O2" },
+                    { value: "B", text: "H2O" },
+                    { value: "C", text: "CO2" },
+                    { value: "D", text: "HO" }
+                ],
+                correctAnswer: "B"
+            },
+            {
+                question: "How many continents are there?",
+                options: [
+                    { value: "A", text: "5" },
+                    { value: "B", text: "6" },
+                    { value: "C", text: "7" },
+                    { value: "D", text: "8" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                question: "What is the speed of light?",
+                options: [
+                    { value: "A", text: "300,000 km/s" },
+                    { value: "B", text: "150,000 km/s" },
+                    { value: "C", text: "100,000 km/s" },
+                    { value: "D", text: "500,000 km/s" }
+                ],
+                correctAnswer: "A"
+            },
+            {
+                question: "Who painted the Mona Lisa?",
+                options: [
+                    { value: "A", text: "Vincent van Gogh" },
+                    { value: "B", text: "Pablo Picasso" },
+                    { value: "C", text: "Leonardo da Vinci" },
+                    { value: "D", text: "Claude Monet" }
+                ],
+                correctAnswer: "C"
+            },
+            {
+                question: "What is the capital of Japan?",
+                options: [
+                    { value: "A", text: "Beijing" },
+                    { value: "B", text: "Seoul" },
+                    { value: "C", text: "Tokyo" },
+                    { value: "D", text: "Bangkok" }
+                ],
+                correctAnswer: "C"
+            }
+        ];
+
+        function getRandomQuestions(num) {
+            let shuffled = quizQuestions.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, num);
+        }
+
+        var randomQuestions = getRandomQuestions(5);
+
+        for (let i = 0; i < randomQuestions.length; i++) {
+            const mainDiv = document.querySelector(".allQuestions");
+            mainDiv.appendChild(generateQuestion(i, randomQuestions));
+        }
+
+        function generateQuestion(questionNo, questions) {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'questionDiv';
+
+            const questionTitle = document.createElement("h3");
+            questionTitle.textContent = questions[questionNo].question;
+            questionDiv.appendChild(questionTitle);
+
+            let options = questions[questionNo].options;
+            for (let i = 0; i < options.length; i++) {
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = "q" + questionNo;
+                input.value = options[i].value;
+
+                const label = document.createElement('label');
+                label.textContent = options[i].text;
+
+                const newLine = document.createElement('br');
+
+                questionDiv.appendChild(input);
+                questionDiv.appendChild(label);
+                questionDiv.appendChild(newLine);
+            }
+            return questionDiv;
+        }
+
+        function calculateResult() {
+            clearInterval(timerInterval); // Stop the timer when Calculate button is clicked
+            let score = 0;
+
+            for (let i = 0; i < randomQuestions.length; i++) {
+                const options = document.getElementsByName("q" + i);
+
+                let selectedValue;
+                for (let j = 0
